@@ -1,15 +1,18 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware per parsing JSON
 app.use(express.json());
 
-// Servire file statici
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 app.use(express.static(path.join(__dirname)));
 
-// Endpoint per l'analisi AI
 app.post('/api/analyze', async (req, res) => {
     try {
         const formData = req.body;
@@ -36,9 +39,9 @@ app.post('/api/analyze', async (req, res) => {
         const difyResponse = await fetch('https://api.dify.ai/v1/chat-messages', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ${process.env.DIFY_API_KEY}'
+                'Authorization': `Bearer ${process.env.DIFY_API_KEY}`,
                 'Content-Type': 'application/json'
-            }
+            },
             body: JSON.stringify({
                 inputs: {},
                 query: prompt,
@@ -63,12 +66,9 @@ app.post('/api/analyze', async (req, res) => {
     }
 });
 
-// Avvio server
 app.listen(PORT, () => {
-    console.log(`Server avviato! Apri: http://localhost:${PORT}/questionario.html`);
+    console.log(`Server avviato su porta ${PORT}`);
 });
-
-
 
 
 
