@@ -38,7 +38,7 @@ app.post('/api/analyze', async (req, res) => {
             headers: {
                 'Authorization': 'Bearer ${process.env.DIFY_API_KEY}'
                 'Content-Type': 'application/json'
-            },
+            }
             body: JSON.stringify({
                 inputs: {},
                 query: prompt,
