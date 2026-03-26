@@ -66,10 +66,11 @@ app.post('/api/analyze', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server avviato su porta ${PORT}`);
 });
 
-
+server.keepAliveTimeout = 120000;
+server.headersTimeout = 125000;
 
 
